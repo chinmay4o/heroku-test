@@ -6,6 +6,7 @@ import { Users } from "../models/bhima/userSchema.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+dotenv.config({ path: "./config.env" });
 
 const router = express.Router();
 
@@ -28,7 +29,7 @@ router.post("/data", async (req, res) => {
 
   await newData.save();
 
-  res.json(newData);
+  res.send(newData);
 });
 
 //   adding recharge customers to the database
@@ -42,13 +43,13 @@ router.post("/recharge", async (req, res) => {
 
   await newData.save();
 
-  res.json(newData);
+  res.send(newData);
 });
 
 //   sending recharge customers to the database
 router.get("/recharge", async (req, res) => {
   const data = await Recharge.find();
-  res.json(data);
+  res.send(data);
 });
 
 
@@ -65,7 +66,7 @@ router.post("/contact", async (req, res) => {
 
   await newData.save();
 
-  res.json(newData);
+  res.send(newData);
 });
 
 
