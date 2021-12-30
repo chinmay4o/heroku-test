@@ -4,6 +4,8 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { Customers } from "./models/bhima/customerSchema.js";
 import { Users } from "./models/bhima/userSchema.js";
+import { Recharge } from "./models/bhima/rechargeSchema.js";
+import { Contact } from "./models/bhima/contactSchema.js";
 
 const app = express();
 
@@ -21,16 +23,16 @@ app.use(express.json());
 const url = process.env.MONGO;
 
 const connectDB = async () => {
-    try {
-        const conn = await mongoose.connect(url , {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        console.log(`mongodb connected: ${conn.connection.host}`)
-    } catch (error) {
-        console.error(`error: ${error.message}`);
-        process.exit(1);
-    }
+  try {
+    const conn = await mongoose.connect(url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log(`mongodb connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(`error: ${error.message}`);
+    process.exit(1);
+  }
 };
 
 connectDB();
@@ -46,41 +48,111 @@ app.get("/customers", async (req, res) => {
     res.send(data);
   } catch (error) {
     console.log(error);
-    res.send(error);
+    res.status(422).send(error);
   }
 });
 
 
-//Login
-app.post("/login", async (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      res.status(422).send("fill the details first ");
-    }
-    try {
-      const user = await Users.findOne({ email: email });
-      if (user) {
-        const verifyUser = await bcrypt.compare(password, user.password);
-        if (verifyUser) {
-          const token = await jwt.sign({ _id: user._id }, process.env.SECRET);
-          user.tokens = user.tokens.concat({ token: token });
-          await user.save();
-          console.log(token);
+// Adding customers to the database
+router.post("/data", async (req, res) => {
+    const { cname, email, number, address } = req.body;
   
-          res.json({user , tokenAll : token});
-        } else {
-          throw new Error("passsword not valid");
-        }
-      }
-    } catch (err) {
-      console.log(err);
-      res.status(422).send(err);
+    try {
+      const newData = new Customers({
+        name: cname,
+        email,
+        number,
+        address,
+      });
+  
+      await newData.save();
+  
+      res.send(newData);
+    } catch (error) {
+      console.log(error);
+      res.status(422).send(error);
     }
   });
-  
+
+//Login
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(422).send("fill the details first ");
+  }
+  try {
+    const user = await Users.findOne({ email: email });
+    if (user) {
+      const verifyUser = await bcrypt.compare(password, user.password);
+      if (verifyUser) {
+        const token = await jwt.sign({ _id: user._id }, process.env.SECRET);
+        user.tokens = user.tokens.concat({ token: token });
+        await user.save();
+        console.log(token);
+
+        res.json({ user, tokenAll: token });
+      } else {
+        throw new Error("passsword not valid");
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(422).send(err);
+  }
+});
+
+//   adding recharge customers to the database
+router.post("/recharge", async (req, res) => {
+  const { cname, number } = req.body;
+
+  try {
+    const newData = new Recharge({
+      name: cname,
+      number,
+    });
+
+    await newData.save();
+
+    res.send(newData);
+  } catch (error) {
+    console.log(error);
+    res.status(422).send(error);
+  }
+});
+
+//   sending recharge customers to the database
+router.get("/recharge", async (req, res) => {
+  try {
+    const data = await Recharge.find();
+    res.send(data);
+  } catch (error) {
+    console.log(error);
+    res.status(422).send(error);
+  }
+});
+
+//   post request for contact form
+router.post("/contact", async (req, res) => {
+  const { cname, email, number, address } = req.body;
+
+  try {
+    const newData = new Contact({
+      name: cname,
+      email,
+      number,
+      address,
+    });
+
+    await newData.save();
+
+    res.send(newData);
+  } catch (error) {
+    console.log(error);
+    res.status(422).send(error);
+  }
+});
+
 
 app.listen(process.env.PORT, () =>
   console.log("listening on port " + process.env.PORT)
 );
-
-
