@@ -52,7 +52,7 @@ app.get("/customers", async (req, res) => {
 
 
 //Login
-router.post("/login", async (req, res) => {
+app.post("/login", async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
       res.status(422).send("fill the details first ");
