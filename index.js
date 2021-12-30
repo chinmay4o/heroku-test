@@ -2,7 +2,6 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
-import { customerRouter } from "./routes/customer.js";
 
 const app = express();
 
@@ -30,8 +29,6 @@ app.get("/", (req, res) => {
   res.send("api is running");
 });
 
-
-app.use("/", customerRouter);
 
 app.listen(process.env.PORT, () =>
   console.log("listening on port " + process.env.PORT)
