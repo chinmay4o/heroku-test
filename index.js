@@ -54,7 +54,7 @@ app.get("/customers", async (req, res) => {
 
 
 // Adding customers to the database
-router.post("/data", async (req, res) => {
+app.post("/data", async (req, res) => {
     const { cname, email, number, address } = req.body;
   
     try {
@@ -102,7 +102,7 @@ app.post("/login", async (req, res) => {
 });
 
 //   adding recharge customers to the database
-router.post("/recharge", async (req, res) => {
+app.post("/recharge", async (req, res) => {
   const { cname, number } = req.body;
 
   try {
@@ -121,7 +121,7 @@ router.post("/recharge", async (req, res) => {
 });
 
 //   sending recharge customers to the database
-router.get("/recharge", async (req, res) => {
+app.get("/recharge", async (req, res) => {
   try {
     const data = await Recharge.find();
     res.send(data);
@@ -132,7 +132,7 @@ router.get("/recharge", async (req, res) => {
 });
 
 //   post request for contact form
-router.post("/contact", async (req, res) => {
+app.post("/contact", async (req, res) => {
   const { cname, email, number, address } = req.body;
 
   try {
