@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
-import {customerRouter} from "./routes/customer.js";
+import {Customers} from "./models/bhima/customerSchema.js";
 
 const app = express();
 
@@ -30,7 +30,10 @@ app.get("/", (req, res) => {
   res.send("api is running");
 });
 
-app.use("/api" , customerRouter);
+app.get("/customers" , async(req, res) => {
+    const data = await Customers.find();
+    res.send(data);
+})
 
 app.listen(process.env.PORT, () =>
   console.log("listening on port " + process.env.PORT)
