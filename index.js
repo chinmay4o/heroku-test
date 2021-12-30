@@ -19,12 +19,20 @@ app.use(express.json());
 
 const url = process.env.MONGO;
 
-mongoose.connect(url, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-const onn = mongoose.connection;
-onn.on("open", () => console.log("mongodb connected"));
+const connectDB = async () => {
+    try {
+        const conn = await mongoose.connect(url , {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log(`mongodb connected: ${conn.connection.host}`)
+    } catch (error) {
+        console.error(`error: ${error.message}`);
+        process.exit(1);
+    }
+};
+
+connectDB();
 
 app.get("/", (req, res) => {
   res.send("api is running");
@@ -43,3 +51,5 @@ app.get("/customers", async (req, res) => {
 app.listen(process.env.PORT, () =>
   console.log("listening on port " + process.env.PORT)
 );
+
+

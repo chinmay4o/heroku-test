@@ -82,7 +82,7 @@ router.post("/login", async (req, res) => {
     if (user) {
       const verifyUser = await bcrypt.compare(password, user.password);
       if (verifyUser) {
-        const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+        const token = await jwt.sign({ _id: user._id }, process.env.SECRET);
         user.tokens = user.tokens.concat({ token: token });
         await user.save();
         console.log(token);
