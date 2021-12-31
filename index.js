@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { Customers } from "./models/bhima/customerSchema.js";
 import { Users } from "./models/bhima/userSchema.js";
