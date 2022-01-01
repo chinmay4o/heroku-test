@@ -8,6 +8,7 @@ import { Customers } from "./models/bhima/customerSchema.js";
 import { Users } from "./models/bhima/userSchema.js";
 import { Recharge } from "./models/bhima/rechargeSchema.js";
 import { Contact } from "./models/bhima/contactSchema.js";
+import {authenticate} from "./middlewares/authenticate.js";
 
 const app = express();
 
@@ -153,6 +154,12 @@ app.post("/contact", async (req, res) => {
     res.status(422).send(error);
   }
 });
+
+// dashboard authentication
+app.post("/dashboard" , authenticate, async (req, res) => {
+  res.send(req.rootUser);
+  
+})
 
 
 app.listen(process.env.PORT, () =>
