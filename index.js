@@ -158,7 +158,6 @@ app.post("/contact", async (req, res) => {
 // dashboard authentication
 app.post("/dashboard" , authenticate, async (req, res) => {
   res.send(req.rootUser);
-  
 })
 
 

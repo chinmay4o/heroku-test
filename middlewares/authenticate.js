@@ -5,7 +5,7 @@ const authenticate = async (req, res, next) => {
   const { token } = req.body;
 
   if(!token) {
-    throw new Error ("token not found one");
+    res.status(401).json({message : "Unauthorized:No token provided"});
   }
 
   try {
